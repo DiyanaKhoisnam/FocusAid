@@ -158,31 +158,31 @@ export default function Home(){
         </h2>
         
         <div style={{display:"grid", gridTemplateColumns:"repeat(3, 1fr)", gap:24}}>
-          <div className="card" style={{background:"var(--card-purple)", border:"none"}}>
+          <div className="card" style={{background:"var(--card-purple)", border:"none", display:"flex", flexDirection:"column", height:"100%"}}>
             <div style={{fontSize:32, marginBottom:16}}>📖</div>
             <h3 style={{fontSize:"20px", fontWeight:700, marginBottom:12, color:"var(--text)"}}>Reading support</h3>
-            <p style={{fontSize:15, color:"var(--muted)", lineHeight:"1.6", marginBottom:20}}>
+            <p style={{fontSize:15, color:"var(--muted)", lineHeight:"1.6", marginBottom:20, flex:1}}>
               Tailored exercises and therapies designed to improve reading, writing, and spelling skills for children with dyslexia.
             </p>
-            <button className="btn ghost" style={{width:"100%"}}>Learn More</button>
+            <button className="btn ghost" style={{width:"100%", marginTop:"auto"}}>Learn More</button>
           </div>
 
-          <div className="card" style={{background:"#A7F3D0", border:"none"}}>
+          <div className="card" style={{background:"#A7F3D0", border:"none", display:"flex", flexDirection:"column", height:"100%"}}>
             <div style={{fontSize:32, marginBottom:16}}>🔢</div>
             <h3 style={{fontSize:"20px", fontWeight:700, marginBottom:12, color:"var(--text)"}}>Math Confidence</h3>
-            <p style={{fontSize:15, color:"var(--muted)", lineHeight:"1.6", marginBottom:20}}>
+            <p style={{fontSize:15, color:"var(--muted)", lineHeight:"1.6", marginBottom:20, flex:1}}>
               Step-by-step guidance, games, and activities that help children with dyscalculia understand numbers and enjoy learning math.
             </p>
-            <button className="btn ghost" style={{width:"100%"}}>Learn More</button>
+            <button className="btn ghost" style={{width:"100%", marginTop:"auto"}}>Learn More</button>
           </div>
 
-          <div className="card" style={{background:"var(--card-yellow)", border:"none"}}>
+          <div className="card" style={{background:"var(--card-yellow)", border:"none", display:"flex", flexDirection:"column", height:"100%"}}>
             <div style={{fontSize:32, marginBottom:16}}>👨‍👩‍👧</div>
             <h3 style={{fontSize:"20px", fontWeight:700, marginBottom:12, color:"var(--text)"}}>Parent Resources</h3>
-            <p style={{fontSize:15, color:"var(--muted)", lineHeight:"1.6", marginBottom:20}}>
+            <p style={{fontSize:15, color:"var(--muted)", lineHeight:"1.6", marginBottom:20, flex:1}}>
               Guides, workshops, and ongoing advice that empower parents to help their children thrive both at home and at school.
             </p>
-            <button className="btn ghost" style={{width:"100%"}}>Learn More</button>
+            <button className="btn ghost" style={{width:"100%", marginTop:"auto"}}>Learn More</button>
           </div>
         </div>
       </div>
