@@ -19,7 +19,7 @@ export default function MyApp({ Component, pageProps }) {
         body {
           margin: 0;
           font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-          background: #FAF3DD !important;
+          background: #E0F2FE !important;
           color: #1F2937 !important;
           overflow-x: hidden;
           overflow-y: auto;
@@ -28,7 +28,7 @@ export default function MyApp({ Component, pageProps }) {
           max-width:1200px;
           margin:28px auto;
           padding:22px;
-          background: rgba(250, 243, 221, 0.0);
+          background: rgba(224, 242, 254, 0.0);
         }
         .topbar { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:6px; }
         .logo { width:54px; height:54px; border-radius:12px; background: #9067C6; color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-weight:800; }

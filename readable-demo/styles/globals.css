@@ -1,5 +1,5 @@
 :root{
-  --bg:#FAF3DD;        /* light beige background */
+  --bg:#E0F2FE;        /* pastel blue background */
   --muted:#6B7280;     /* muted gray */
   --text:#1F2937;      /* dark text */
 
@@ -29,7 +29,7 @@ body{
   margin:0;
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   color:var(--text);
-  background: #FAF3DD;
+  background: #E0F2FE;
   -webkit-font-smoothing:antialiased;
   overflow-x: hidden;
   overflow-y: auto;

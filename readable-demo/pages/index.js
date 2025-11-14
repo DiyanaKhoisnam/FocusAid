@@ -167,7 +167,7 @@ export default function Home(){
             <button className="btn ghost" style={{width:"100%"}}>Learn More</button>
           </div>
 
-          <div className="card" style={{background:"var(--card-blue)", border:"none"}}>
+          <div className="card" style={{background:"#A7F3D0", border:"none"}}>
             <div style={{fontSize:32, marginBottom:16}}>🔢</div>
             <h3 style={{fontSize:"20px", fontWeight:700, marginBottom:12, color:"var(--text)"}}>Math Confidence</h3>
             <p style={{fontSize:15, color:"var(--muted)", lineHeight:"1.6", marginBottom:20}}>
