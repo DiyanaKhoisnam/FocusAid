@@ -93,64 +93,6 @@ export default function Home(){
         </div>
       </div>
 
-      {/* Support Cards Section */}
-      <div style={{marginTop:60, marginBottom:60}}>
-        <h2 style={{fontSize:"36px", fontWeight:800, marginBottom:16, color:"var(--text)"}}>
-          Practical strategies, resources, and guidance for parents and teachers
-        </h2>
-        <p style={{fontSize:"18px", color:"var(--muted)", marginBottom:32, maxWidth:"800px"}}>
-          We provide practical strategies, helpful resources, and clear guidance designed to support both parents and teachers in helping children with dyslexia and dyscalculia succeed.
-        </p>
-        
-        <div style={{display:"grid", gridTemplateColumns:"repeat(2, 1fr)", gap:24, marginTop:32}}>
-          <div className="card" style={{background:"var(--card)"}}>
-            <div style={{fontSize:12, fontWeight:700, color:"var(--orange)", marginBottom:12, letterSpacing:"1px"}}>
-              SUPPORT FOR PARENTS
-            </div>
-            <h3 style={{fontSize:"24px", fontWeight:700, marginBottom:12, color:"var(--text)"}}>
-              I'm a Parent - Get Support for My Child
-            </h3>
-            <div style={{
-              width:"100%",
-              height:"200px",
-              background:"linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(167, 139, 250, 0.1))",
-              borderRadius:12,
-              display:"flex",
-              alignItems:"center",
-              justifyContent:"center",
-              marginTop:16
-            }}>
-              <div style={{textAlign:"center", color:"var(--muted)"}}>
-                <div style={{fontSize:48}}>👨‍👩‍👧‍👦</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="card" style={{background:"var(--card)"}}>
-            <div style={{fontSize:12, fontWeight:700, color:"var(--orange)", marginBottom:12, letterSpacing:"1px"}}>
-              CERTIFICATION FOR EDUCATORS
-            </div>
-            <h3 style={{fontSize:"24px", fontWeight:700, marginBottom:12, color:"var(--text)"}}>
-              I'm an Educator - Become a Certified Dyslexia Specialist
-            </h3>
-            <div style={{
-              width:"100%",
-              height:"200px",
-              background:"linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(167, 139, 250, 0.1))",
-              borderRadius:12,
-              display:"flex",
-              alignItems:"center",
-              justifyContent:"center",
-              marginTop:16
-            }}>
-              <div style={{textAlign:"center", color:"var(--muted)"}}>
-                <div style={{fontSize:48}}>🎓</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Services Section */}
       <div style={{marginTop:60, marginBottom:60, background:"var(--bg)", padding:"40px", borderRadius:20}}>
         <h2 style={{fontSize:"36px", fontWeight:800, marginBottom:32, color:"var(--text)"}}>
