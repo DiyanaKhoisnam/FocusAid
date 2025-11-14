@@ -2,6 +2,7 @@
 import Head from "next/head";
 import "../styles/globals.css";
 import NavBar from "../components/NavBar";
+import PomodoroTimer from "../components/PomodoroTimer";
 
 export default function MyApp({ Component, pageProps }) {
   return (
@@ -40,6 +41,7 @@ export default function MyApp({ Component, pageProps }) {
         .tok.VERB { color:#9067C6; }
       `}</style>
 
+      <PomodoroTimer />
       <div className="container" style={{paddingTop:0}}>
         <NavBar />
         <main style={{ marginTop: 0 }}>
