@@ -26,17 +26,35 @@ export default function NavBar(){
         </div>
       </div>
 
-      <div className="navbar-links">
+      <div className="navbar-links" style={{gap: "8px"}}>
         <Link href="/" className={active("/")}>Home</Link>
-        <Link href="/services" className={active("/services")}>Services</Link>
-        <Link href="/resources" className={active("/resources")}>Resources</Link>
-        <Link href="/about" className={active("/about")}>About Me</Link>
-        <Link href="/contact" className={active("/contact")}>Contact Me</Link>
-      </div>
-
-      <div className="navbar-cta">
+        <Link 
+          href="/uploads" 
+          className={active("/uploads")}
+          style={{
+            background: active("/uploads") === "active" ? "linear-gradient(135deg, #F97316 0%, #FB923C 100%)" : "transparent",
+            color: active("/uploads") === "active" ? "#FFFFFF" : "var(--text)",
+            padding: "8px 16px",
+            borderRadius: "8px",
+            fontWeight: 600,
+            textDecoration: "none",
+            transition: "all 0.2s",
+          }}
+          onMouseEnter={(e) => {
+            if (active("/uploads") !== "active") {
+              e.currentTarget.style.background = "rgba(249, 115, 22, 0.1)";
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (active("/uploads") !== "active") {
+              e.currentTarget.style.background = "transparent";
+            }
+          }}
+        >
+          Uploads
+        </Link>
         <Link href="/login" style={{textDecoration:"none"}}>
-          <button className="btn-nav-cta">Login</button>
+          <button className="btn-nav-cta" style={{marginLeft: "0"}}>Login</button>
         </Link>
       </div>
     </nav>

@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Optional
+from typing import Optional, List, Dict
 from datetime import datetime
 
 class DocumentUploadResponse(BaseModel):
@@ -25,3 +25,21 @@ class SummaryResponse(BaseModel):
     summary_length: int = Field(..., description="Length of summary in characters")
     created_at: datetime = Field(..., description="Summary creation timestamp")
 
+class ProcessDocumentRequest(BaseModel):
+    """Request model for processing document with multiple options"""
+    document_id: str = Field(..., description="ID of the document to process")
+    options: Dict[str, bool] = Field(..., description="Processing options: summary, highlight, textToAudio, simplify")
+    accessibility_settings: Optional[Dict[str, str]] = Field(
+        default=None,
+        description="Accessibility settings: spacing (normal/wide/extra-wide), font (default/open-dyslexic/comic-sans/arial), colorTheme (default/high-contrast/sepia/dark)"
+    )
+
+class ProcessDocumentResponse(BaseModel):
+    """Response model for processed document"""
+    document_id: str = Field(..., description="ID of the processed document")
+    processed_text: Optional[str] = Field(default="", description="Processed text with accessibility settings applied")
+    summary: Optional[str] = Field(default=None, description="Generated summary if requested")
+    highlighted_text: Optional[str] = Field(default=None, description="Text with highlights if requested")
+    audio_url: Optional[str] = Field(default=None, description="URL to generated audio if requested")
+    simplified_text: Optional[str] = Field(default=None, description="Simplified text if requested")
+    accessibility_applied: Dict[str, str] = Field(default_factory=dict, description="Applied accessibility settings")

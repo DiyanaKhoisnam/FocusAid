@@ -3,6 +3,7 @@ import Head from "next/head";
 import "../styles/globals.css";
 import NavBar from "../components/NavBar";
 import PomodoroTimer from "../components/PomodoroTimer";
+import ChatBot from "../components/ChatBot";
 
 export default function MyApp({ Component, pageProps }) {
   return (
@@ -41,6 +42,7 @@ export default function MyApp({ Component, pageProps }) {
         .tok.VERB { color:#9067C6; }
       `}</style>
 
+      <ChatBot />
       <PomodoroTimer />
       <div className="container" style={{paddingTop:0}}>
         <NavBar />

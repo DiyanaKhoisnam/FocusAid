@@ -43,19 +43,6 @@ export default function Home(){
       {/* Hero Section */}
       <div className="hero">
         <div className="hero-left">
-          <div style={{display:"flex", alignItems:"center", gap:12, marginBottom:16}}>
-            <div style={{
-              background:"var(--orange)", 
-              padding:"6px 12px", 
-              borderRadius:999, 
-              fontWeight:700, 
-              color:"#FFFFFF",
-              fontSize:13
-            }}>
-              1:1 TUTORING FOR EVERY CHILD
-            </div>
-          </div>
-
           <h1 className="h1" style={{fontSize:"56px", lineHeight:"1.1", marginBottom:20}}>
             Supporting Children with Dyslexia & Dyscalculia
           </h1>
@@ -83,12 +70,27 @@ export default function Home(){
             display:"flex",
             alignItems:"center",
             justifyContent:"center",
-            border:"2px dashed var(--orange)"
+            border:"2px solid var(--orange)",
+            overflow:"hidden",
+            position:"relative"
           }}>
-            <div style={{textAlign:"center", color:"var(--muted)"}}>
-              <div style={{fontSize:48, marginBottom:12}}>📚</div>
-              <div style={{fontSize:14}}>Illustration Area</div>
-            </div>
+            <div style={{
+              width:"100%",
+              height:"100%",
+              backgroundImage:"url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&q=80')",
+              backgroundSize:"cover",
+              backgroundPosition:"center",
+              opacity:0.9,
+              filter:"brightness(1.1) saturate(1.2)"
+            }} />
+            <div style={{
+              position:"absolute",
+              top:0,
+              left:0,
+              right:0,
+              bottom:0,
+              background:"linear-gradient(135deg, rgba(249, 115, 22, 0.2), rgba(167, 139, 250, 0.2))"
+            }} />
           </div>
         </div>
       </div>
@@ -96,7 +98,7 @@ export default function Home(){
       {/* Services Section */}
       <div style={{marginTop:60, marginBottom:60, background:"var(--bg)", padding:"40px", borderRadius:20}}>
         <h2 style={{fontSize:"36px", fontWeight:800, marginBottom:32, color:"var(--text)"}}>
-          Tailored Support for Children, Parents, and Educators
+          Designed for ADHD and Dyslexic Learners
         </h2>
         
         <div style={{display:"grid", gridTemplateColumns:"repeat(3, 1fr)", gap:24}}>
