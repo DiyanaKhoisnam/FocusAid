@@ -7,8 +7,8 @@ export default function NavBar(){
   const active = (path) => router.pathname === path ? "active" : "";
 
   return (
-    <div className="topbar">
-      <div className="brand">
+    <nav className="navbar">
+      <div className="navbar-brand">
         <div className="logo">
           <img 
             src="/PHOTO-2025-11-14-15-18-06.jpg" 
@@ -21,18 +21,24 @@ export default function NavBar(){
             }}
           />
         </div>
-
-        <div>
+        <div className="brand-text">
           <h1>FocusAid</h1>
-          <div className="small">AI accessibility platform</div>
         </div>
       </div>
 
-      <div className="navlinks">
-        <Link href="/"><a className={active("/")}>Home</a></Link>
-        <Link href="/login"><a className={active("/login")}>Log in</a></Link>
-        <Link href="/help"><a className={active("/help")}>Help</a></Link>
+      <div className="navbar-links">
+        <Link href="/" className={active("/")}>Home</Link>
+        <Link href="/services" className={active("/services")}>Services</Link>
+        <Link href="/resources" className={active("/resources")}>Resources</Link>
+        <Link href="/about" className={active("/about")}>About Me</Link>
+        <Link href="/contact" className={active("/contact")}>Contact Me</Link>
       </div>
-    </div>
+
+      <div className="navbar-cta">
+        <Link href="/login" style={{textDecoration:"none"}}>
+          <button className="btn-nav-cta">Login</button>
+        </Link>
+      </div>
+    </nav>
   );
 }
