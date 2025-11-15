@@ -77,6 +77,10 @@ export default function Uploads() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [speechSynthesis, setSpeechSynthesis] = useState(null);
   
+  // Highlight tool state
+  const [isHighlightMode, setIsHighlightMode] = useState(false);
+  const [highlightedSelections, setHighlightedSelections] = useState([]); // Array of {text, start, end}
+  
   // Initialize speech synthesis
   useEffect(() => {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
@@ -147,6 +151,103 @@ export default function Uploads() {
       }
     };
   }, [speechSynthesis]);
+  
+  // Function to handle text selection and highlighting
+  const handleTextSelection = () => {
+    if (!isHighlightMode || !documentText) return;
+    
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
+    
+    const selectedText = selection.toString().trim();
+    if (!selectedText || selectedText.length < 2) return; // Minimum 2 characters
+    
+    // Get the full plain text content
+    const fullText = extractPlainText(documentText);
+    const selectedTextLower = selectedText.toLowerCase();
+    
+    // Find all occurrences of the selected text in the document (case-insensitive)
+    const occurrences = [];
+    let searchIndex = 0;
+    while (searchIndex < fullText.length) {
+      const index = fullText.toLowerCase().indexOf(selectedTextLower, searchIndex);
+      if (index === -1) break;
+      
+      // Get the actual text at this position (preserve original case)
+      const actualText = fullText.substring(index, index + selectedText.length);
+      occurrences.push({ 
+        start: index, 
+        end: index + selectedText.length, 
+        text: actualText 
+      });
+      searchIndex = index + 1;
+    }
+    
+    if (occurrences.length === 0) return;
+    
+    // Add to highlighted selections (avoid duplicates)
+    setHighlightedSelections(prev => {
+      const newSelections = [...prev];
+      occurrences.forEach(occ => {
+        // Check if this exact range is already highlighted
+        const exists = newSelections.some(sel => 
+          sel.start === occ.start && sel.end === occ.end
+        );
+        if (!exists) {
+          newSelections.push(occ);
+        }
+      });
+      return newSelections;
+    });
+    
+    // Clear selection
+    selection.removeAllRanges();
+  };
+  
+  // Apply highlights to document text
+  const applyHighlightsToText = (text) => {
+    if (!text || highlightedSelections.length === 0) return text;
+    
+    const plainText = extractPlainText(text);
+    let highlightedText = plainText;
+    
+    // Sort selections by start position (reverse order to maintain indices)
+    const sortedSelections = [...highlightedSelections].sort((a, b) => b.start - a.start);
+    
+    // Apply highlights from end to start to maintain correct indices
+    sortedSelections.forEach(sel => {
+      const before = highlightedText.substring(0, sel.start);
+      const selected = highlightedText.substring(sel.start, sel.end);
+      const after = highlightedText.substring(sel.end);
+      highlightedText = before + `<mark style="background-color: #FEF08A; padding: 2px 4px; border-radius: 3px;">${selected}</mark>` + after;
+    });
+    
+    return highlightedText;
+  };
+  
+  // Toggle highlight mode
+  const toggleHighlightMode = () => {
+    setIsHighlightMode(!isHighlightMode);
+    if (!isHighlightMode) {
+      // Enable highlight mode - add event listener
+      document.addEventListener('mouseup', handleTextSelection);
+    } else {
+      // Disable highlight mode - remove event listener
+      document.removeEventListener('mouseup', handleTextSelection);
+    }
+  };
+  
+  // Cleanup event listener on unmount
+  useEffect(() => {
+    return () => {
+      document.removeEventListener('mouseup', handleTextSelection);
+    };
+  }, [isHighlightMode]);
+  
+  // Clear all highlights
+  const clearHighlights = () => {
+    setHighlightedSelections([]);
+  };
   
   // Function to split text into sentences (preserves HTML if present)
   const splitIntoSentences = (htmlText) => {
@@ -762,8 +863,6 @@ export default function Uploads() {
                   <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "20px" }}>
                     {[
                       { key: "summary", icon: "📝", label: "Summary", color: "#8B5CF6" },
-                      { key: "highlight", icon: "✨", label: "Highlight", color: "#F59E0B" },
-                      { key: "textToAudio", icon: "🔊", label: "Text to Audio", color: "#3B82F6" },
                       { key: "simplify", icon: "🔧", label: "Simplify", color: "#F97316" }
                     ].map((option) => (
                       <button
@@ -1201,20 +1300,27 @@ export default function Uploads() {
                     lineHeight: selectedProfile === "dyslexia" ? "2.0" : "1.8",
                     color: textColor,
                     letterSpacing: `${(accessibilitySettings.spacing - 1) * 0.05}em`,
-                    fontFamily: accessibilitySettings.font === "comic-sans" 
-                      ? "Comic Sans MS, cursive" 
-                      : accessibilitySettings.font === "arial" 
+                    fontFamily: accessibilitySettings.font === "comic-sans"
+                      ? "Comic Sans MS, cursive"
+                      : accessibilitySettings.font === "arial"
                       ? "Arial, sans-serif"
                       : accessibilitySettings.font === "open-dyslexic"
                       ? "OpenDyslexic, sans-serif"
                       : "inherit",
                     transition: "all 0.3s ease",
+                    cursor: isHighlightMode ? "text" : "default",
+                    userSelect: isHighlightMode ? "text" : "auto",
                   }}
                 >
                   {/* Format text with sentence lines and spacing */}
                   {(() => {
                     try {
-                      const sentences = splitIntoSentences(documentText);
+                      // Apply highlights to document text before splitting
+                      const textWithHighlights = highlightedSelections.length > 0 
+                        ? applyHighlightsToText(documentText)
+                        : documentText;
+                      
+                      const sentences = splitIntoSentences(textWithHighlights);
                       
                       if (sentences.length > 0) {
                         return sentences.map((sentence, index) => (
