@@ -209,6 +209,13 @@ async def process_document(
         
         print(f"Document text length: {len(text)} characters")
         
+        # Convert accessibility_settings to string values for response schema
+        accessibility_applied = {}
+        if accessibility_settings:
+            for key, value in accessibility_settings.items():
+                # Convert all values to strings as required by schema
+                accessibility_applied[key] = str(value) if value is not None else ""
+        
         results = {
             "document_id": document_id,
             "processed_text": None,
@@ -216,7 +223,7 @@ async def process_document(
             "highlighted_text": None,
             "audio_url": None,
             "simplified_text": None,
-            "accessibility_applied": accessibility_settings or {}
+            "accessibility_applied": accessibility_applied
         }
         
         # Generate summary if requested

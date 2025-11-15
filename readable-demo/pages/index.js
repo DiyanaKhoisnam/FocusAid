@@ -1,348 +1,809 @@
 // pages/index.js
 import { useState } from "react";
-import nlp from "compromise";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function Home(){
-  const [text, setText] = useState("Paste or type an educational paragraph here. Try a long paragraph to see the simplifier in action.");
-  const [simplified, setSimplified] = useState("");
+  const router = useRouter();
+  const [demoText, setDemoText] = useState("The intricate mechanisms underlying cognitive processing in neurodivergent individuals necessitate a comprehensive understanding of how environmental stimuli interact with neural pathways to produce adaptive behavioral responses.");
+  const [activeTab, setActiveTab] = useState("original");
+  const [compareMode, setCompareMode] = useState(false);
 
-  function mockSimplify(t){
-    return t.split(/(?<=[.?!])\s+/).map(s=>{
-      let r = s.trim();
-      if(r.length>160) r = r.slice(0,130) + "…";
-      r = r.replace(/\butilize\b/gi,"use").replace(/\bapproximately\b/gi,"about");
-      return r;
-    }).join(" ");
+  // Mock simplification function
+  function simplifyText(text) {
+    return text
+      .replace(/\bintricate\b/gi, "complex")
+      .replace(/\bmechanisms\b/gi, "ways")
+      .replace(/\bunderlying\b/gi, "behind")
+      .replace(/\bcognitive processing\b/gi, "thinking")
+      .replace(/\bneurodivergent\b/gi, "people with different brain types")
+      .replace(/\bnecessitate\b/gi, "need")
+      .replace(/\bcomprehensive\b/gi, "full")
+      .replace(/\benvironmental stimuli\b/gi, "things around us")
+      .replace(/\bneural pathways\b/gi, "brain connections")
+      .replace(/\badaptive behavioral responses\b/gi, "helpful actions");
   }
 
-  function colorize(textStr){
-    const doc = nlp(textStr);
-    const terms = doc.terms().out("terms");
-    if(!terms || terms.length===0) return textStr;
-    return terms.map(t=>{
-      const w = t.text;
-      const tag = (t.tags && t.tags[0]) || "";
-      let cls = "tok";
-      if(tag.includes("Noun")) cls += " NOUN";
-      else if(tag.includes("Verb")) cls += " VERB";
-      else if(tag.includes("Adjective")) cls += " ADJ";
-      else if(tag.includes("Adverb")) cls += " ADV";
-      return `<span class="${cls}">${w}</span>`;
-    }).join(" ");
-  }
+  const simplifiedText = simplifyText(demoText);
 
-  function simplify(){
-    const s = mockSimplify(text);
-    setSimplified(s);
-    const out = document.getElementById("__out");
-    if(out) out.innerHTML = s.split(/\n+/).map(p => `<div style="margin-bottom:12px;padding:12px;border-radius:10px;background:#FFFFFF;border:1px solid var(--p1)">${colorize(p)}</div>`).join("");
-  }
+  const renderText = () => {
+    switch(activeTab) {
+      case "dyslexia":
+        return (
+          <div style={{
+            fontSize: "20px",
+            lineHeight: "2.0",
+            letterSpacing: "0.1em",
+            fontFamily: "Arial, sans-serif",
+            color: "#1F2937",
+            padding: "24px",
+            background: "#FFFFFF",
+            borderRadius: "12px"
+          }}>
+            {simplifiedText}
+          </div>
+        );
+      case "adhd":
+        return (
+          <div style={{
+            fontSize: "18px",
+            lineHeight: "1.8",
+            padding: "24px",
+            background: "#F9FAFB",
+            borderRadius: "12px",
+            border: "2px solid #E5E7EB"
+          }}>
+            {simplifiedText.split(". ").map((sentence, i) => (
+              <div key={i} style={{
+                marginBottom: "16px",
+                padding: "12px",
+                background: i % 2 === 0 ? "#EFF6FF" : "#FFFFFF",
+                borderRadius: "8px",
+                borderLeft: "4px solid #3B82F6"
+              }}>
+                {sentence}
+              </div>
+            ))}
+          </div>
+        );
+      case "simplified":
+        return (
+          <div style={{
+            fontSize: "18px",
+            lineHeight: "1.8",
+            padding: "24px",
+            background: "#FFFFFF",
+            borderRadius: "12px"
+          }}>
+            {simplifiedText}
+          </div>
+        );
+      default:
+        return (
+          <div style={{
+            fontSize: "16px",
+            lineHeight: "1.6",
+            padding: "24px",
+            background: "#FFFFFF",
+            borderRadius: "12px"
+          }}>
+            {demoText}
+          </div>
+        );
+    }
+  };
 
   return (
-    <div style={{marginTop:0}}>
-      {/* Hero Section */}
-      <div className="hero">
-        <div className="hero-left">
-          <h1 className="h1" style={{fontSize:"56px", lineHeight:"1.1", marginBottom:20}}>
-            Supporting Students with Dyslexia and ADHD
+    <div style={{marginTop: 0}}>
+      {/* 🌟 HERO SECTION */}
+      <div className="hero" style={{
+        background: "linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%)",
+        padding: "80px 20px",
+        borderRadius: "0 0 40px 40px",
+        marginBottom: "80px"
+      }}>
+        <div style={{maxWidth: "1200px", margin: "0 auto", textAlign: "center"}}>
+          <h1 className="h1" style={{
+            fontSize: "64px",
+            lineHeight: "1.1",
+            marginBottom: "24px",
+            fontWeight: 800,
+            background: "linear-gradient(135deg, #8B5CF6 0%, #10B981 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text"
+          }}>
+            Reading Made Easier for Every Kind of Brain.
           </h1>
-          <p className="lead" style={{fontSize:"18px", lineHeight:"1.6", marginBottom:32, maxWidth:"600px"}}>
-            Transform any educational content into dyslexia- and ADHD-friendly formats with our AI-powered platform — offering instant audio narration, smart summaries, and optimized, distraction-free text rendering designed for diverse neurodivergent learners.
+          <p className="lead" style={{
+            fontSize: "22px",
+            lineHeight: "1.6",
+            marginBottom: "40px",
+            maxWidth: "800px",
+            margin: "0 auto 40px",
+            color: "var(--muted)"
+          }}>
+            AI-powered accessibility that turns any text into a personalised, dyslexia-friendly and ADHD-friendly reading experience.
           </p>
-
-          <div className="cta-row" style={{gap:16}}>
-            <button className="btn primary" style={{padding:"14px 28px", fontSize:"16px"}} onClick={()=>document.getElementById('upload-input').click()}>
-              Get Support
-            </button>
-            <button className="btn ghost" style={{padding:"14px 28px", fontSize:"16px"}} onClick={()=>alert("Learn More (demo)")}>
-              Learn More
-            </button>
-            <input id="upload-input" type="file" accept=".pdf,.txt" style={{display:"none"}} onChange={(e)=>{ const f=e.target.files[0]; if(f) alert("Uploaded: "+f.name); }} />
+          
+          <div className="cta-row" style={{
+            display: "flex",
+            gap: "16px",
+            justifyContent: "center",
+            flexWrap: "wrap",
+            marginBottom: "24px"
+          }}>
+            <Link href="#demo">
+              <button className="btn primary" style={{
+                padding: "16px 32px",
+                fontSize: "18px",
+                fontWeight: 700,
+                borderRadius: "12px",
+                boxShadow: "0 4px 20px rgba(139, 92, 246, 0.3)"
+              }}>
+                👉 Try Demo
+              </button>
+            </Link>
+            <Link href="/uploads">
+              <button className="btn" style={{
+                padding: "16px 32px",
+                fontSize: "18px",
+                fontWeight: 700,
+                borderRadius: "12px",
+                background: "linear-gradient(135deg, #10B981 0%, #34D399 100%)",
+                color: "#FFFFFF",
+                border: "none",
+                boxShadow: "0 4px 20px rgba(16, 185, 129, 0.3)"
+              }}>
+                👉 Simplify Text
+              </button>
+            </Link>
+            <Link href="/uploads">
+              <button className="btn" style={{
+                padding: "16px 32px",
+                fontSize: "18px",
+                fontWeight: 700,
+                borderRadius: "12px",
+                background: "linear-gradient(135deg, #F97316 0%, #FB923C 100%)",
+                color: "#FFFFFF",
+                border: "none",
+                boxShadow: "0 4px 20px rgba(249, 115, 22, 0.3)"
+              }}>
+                👉 Upload PDF
+              </button>
+            </Link>
           </div>
+          
+          <p style={{
+            fontSize: "16px",
+            color: "var(--muted)",
+            fontStyle: "italic",
+            marginTop: "32px"
+          }}>
+            Built for neurodiverse learners. Made for everyone.
+          </p>
+        </div>
+      </div>
+
+      {/* 🧠 INTERACTIVE DEMO SECTION */}
+      <div id="demo" style={{
+        maxWidth: "1200px",
+        margin: "0 auto 80px",
+        padding: "0 20px"
+      }}>
+        <div style={{textAlign: "center", marginBottom: "48px"}}>
+          <h2 style={{
+            fontSize: "42px",
+            fontWeight: 800,
+            marginBottom: "16px",
+            color: "var(--text)"
+          }}>
+            See the Transformation in Seconds
+          </h2>
+          <p style={{
+            fontSize: "18px",
+            color: "var(--muted)",
+            maxWidth: "700px",
+            margin: "0 auto"
+          }}>
+            Paste any paragraph and watch it instantly turn into a simplified, spaced, color-coded, focus-friendly version.
+          </p>
         </div>
 
-        <div className="hero-right" style={{display:"flex", alignItems:"center", justifyContent:"center"}}>
+        <div className="card" style={{
+          padding: "32px",
+          background: "#FFFFFF",
+          borderRadius: "20px",
+          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)"
+        }}>
+          {/* Tabs */}
           <div style={{
-            width:"100%",
-            height:"400px",
-            background:"linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(167, 139, 250, 0.1))",
-            borderRadius:20,
-            display:"flex",
-            alignItems:"center",
-            justifyContent:"center",
-            border:"2px solid var(--orange)",
-            overflow:"hidden",
-            position:"relative"
+            display: "flex",
+            gap: "12px",
+            marginBottom: "24px",
+            flexWrap: "wrap",
+            borderBottom: "2px solid #E5E7EB",
+            paddingBottom: "16px"
           }}>
-            <div style={{
-              width:"100%",
-              height:"100%",
-              backgroundImage:"url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&q=80')",
-              backgroundSize:"cover",
-              backgroundPosition:"center",
-              opacity:0.9,
-              filter:"brightness(1.1) saturate(1.2)"
-            }} />
-            <div style={{
-              position:"absolute",
-              top:0,
-              left:0,
-              right:0,
-              bottom:0,
-              background:"linear-gradient(135deg, rgba(249, 115, 22, 0.2), rgba(167, 139, 250, 0.2))"
-            }} />
-          </div>
-        </div>
-      </div>
-
-      {/* Services Section */}
-      <div style={{marginTop:60, marginBottom:60, background:"var(--bg)", padding:"40px", borderRadius:20}}>
-        <h2 style={{fontSize:"36px", fontWeight:800, marginBottom:32, color:"var(--text)"}}>
-          Designed for ADHD and Dyslexic Learners
-        </h2>
-        
-        <div style={{display:"grid", gridTemplateColumns:"repeat(3, 1fr)", gap:24}}>
-          <div className="card" style={{background:"var(--card-purple)", border:"none", display:"flex", flexDirection:"column", height:"100%"}}>
-            <div style={{fontSize:32, marginBottom:16}}>📖</div>
-            <h3 style={{fontSize:"20px", fontWeight:700, marginBottom:12, color:"var(--text)"}}>Reading support</h3>
-            <p style={{fontSize:15, color:"var(--muted)", lineHeight:"1.6", marginBottom:20, flex:1}}>
-              Tailored tools and features designed to improve reading, writing, and comprehension skills for students with dyslexia.
-            </p>
-            <button className="btn ghost" style={{width:"100%", marginTop:"auto"}}>Learn More</button>
+            {[
+              { id: "original", label: "Original" },
+              { id: "dyslexia", label: "Dyslexia Mode" },
+              { id: "adhd", label: "ADHD Focus Mode" },
+              { id: "simplified", label: "Simplified Version" }
+            ].map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                style={{
+                  padding: "12px 24px",
+                  borderRadius: "10px",
+                  border: "none",
+                  background: activeTab === tab.id
+                    ? "linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)"
+                    : "#F3F4F6",
+                  color: activeTab === tab.id ? "#FFFFFF" : "var(--text)",
+                  fontSize: "16px",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  transition: "all 0.2s"
+                }}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
 
-          <div className="card" style={{background:"#A7F3D0", border:"none", display:"flex", flexDirection:"column", height:"100%"}}>
-            <div style={{fontSize:32, marginBottom:16}}>🎯</div>
-            <h3 style={{fontSize:"20px", fontWeight:700, marginBottom:12, color:"var(--text)"}}>Focus Support</h3>
-            <p style={{fontSize:15, color:"var(--muted)", lineHeight:"1.6", marginBottom:20, flex:1}}>
-              Tools and strategies designed to help students with ADHD maintain focus, reduce distractions, and improve learning outcomes.
-            </p>
-            <button className="btn ghost" style={{width:"100%", marginTop:"auto"}}>Learn More</button>
-          </div>
-
-          <div className="card" style={{background:"var(--card-yellow)", border:"none", display:"flex", flexDirection:"column", height:"100%"}}>
-            <div style={{fontSize:32, marginBottom:16}}>👨‍👩‍👧</div>
-            <h3 style={{fontSize:"20px", fontWeight:700, marginBottom:12, color:"var(--text)"}}>Parent Resources</h3>
-            <p style={{fontSize:15, color:"var(--muted)", lineHeight:"1.6", marginBottom:20, flex:1}}>
-              Guides, workshops, and ongoing advice that empower parents to help their children thrive both at home and at school.
-            </p>
-            <button className="btn ghost" style={{width:"100%", marginTop:"auto"}}>Learn More</button>
-          </div>
-        </div>
-      </div>
-
-      {/* Text Simplifier Section */}
-      <div style={{marginTop:60, marginBottom:60}}>
-        <h2 style={{fontSize:"36px", fontWeight:800, marginBottom:16, color:"var(--text)"}}>
-          Simplify Your Text
-        </h2>
-        <p style={{fontSize:"18px", color:"var(--muted)", marginBottom:32}}>
-          Use our text simplifier to make educational content more accessible.
-        </p>
-        
-        <div className="grid" style={{gridTemplateColumns:"repeat(3, 1fr)", gap:24, marginBottom:32}}>
-          {/* Before → After Card */}
-          <div className="card" style={{
-            background: "linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)",
-            border: "2px solid #F59E0B",
-            position: "relative",
-            overflow: "hidden"
-          }}>
-            <div style={{
-              position: "absolute",
-              top: "-20px",
-              right: "-20px",
-              width: "80px",
-              height: "80px",
-              background: "rgba(245, 158, 11, 0.2)",
-              borderRadius: "50%",
-            }} />
-            <div style={{position: "relative", zIndex: 1}}>
-              <div style={{
-                fontSize: "32px",
-                marginBottom: "12px",
-                display: "flex",
-                alignItems: "center",
-                gap: "8px"
-              }}>
-                <span>📊</span>
-                <h3 style={{margin: 0, fontSize: "22px", fontWeight: 800, color: "var(--text)"}}>
-                  Before → After
-                </h3>
-              </div>
-              <p style={{fontSize: "14px", color: "var(--muted)", lineHeight: "1.6", marginBottom: "16px"}}>
-                See your text transform from complex to simple. Original text on the left, simplified version on the right.
-              </p>
-              <div style={{
-                background: "rgba(255, 255, 255, 0.7)",
-                padding: "12px",
-                borderRadius: "8px",
-                border: "1px solid rgba(245, 158, 11, 0.3)"
-              }}>
-                <div style={{display: "flex", gap: "12px", fontSize: "12px"}}>
-                  <div style={{flex: 1}}>
-                    <div style={{fontWeight: 700, color: "#92400E", marginBottom: "4px"}}>BEFORE</div>
-                    <div style={{color: "#78350F"}}>Complex sentences with difficult words</div>
-                  </div>
-                  <div style={{fontSize: "20px", color: "#F59E0B"}}>→</div>
-                  <div style={{flex: 1}}>
-                    <div style={{fontWeight: 700, color: "#92400E", marginBottom: "4px"}}>AFTER</div>
-                    <div style={{color: "#78350F"}}>Simple, clear sentences</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Readable Output Card */}
-          <div className="card" style={{
-            background: "linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%)",
-            border: "2px solid #3B82F6",
-            position: "relative",
-            overflow: "hidden"
-          }}>
-            <div style={{
-              position: "absolute",
-              top: "-20px",
-              right: "-20px",
-              width: "80px",
-              height: "80px",
-              background: "rgba(59, 130, 246, 0.2)",
-              borderRadius: "50%",
-            }} />
-            <div style={{position: "relative", zIndex: 1}}>
-              <div style={{
-                fontSize: "32px",
-                marginBottom: "12px",
-                display: "flex",
-                alignItems: "center",
-                gap: "8px"
-              }}>
-                <span>✨</span>
-                <h3 style={{margin: 0, fontSize: "22px", fontWeight: 800, color: "var(--text)"}}>
-                  Readable Output
-                </h3>
-              </div>
-              <p style={{fontSize: "14px", color: "var(--muted)", lineHeight: "1.6", marginBottom: "16px"}}>
-                Get color-coded, syntax-highlighted text that's easier to read and understand.
-              </p>
-              <div id="__out" className="output small" style={{
-                background: "rgba(255, 255, 255, 0.8)",
+          {/* Text Input */}
+          <div style={{marginBottom: "24px"}}>
+            <label style={{
+              display: "block",
+              fontSize: "14px",
+              fontWeight: 600,
+              marginBottom: "8px",
+              color: "var(--text)"
+            }}>
+              Paste your text here:
+            </label>
+            <textarea
+              value={demoText}
+              onChange={(e) => setDemoText(e.target.value)}
+              style={{
+                width: "100%",
+                minHeight: "120px",
                 padding: "16px",
-                borderRadius: "8px",
-                minHeight: "100px",
-                border: "1px solid rgba(59, 130, 246, 0.3)",
-                fontSize: "13px",
-                lineHeight: "1.6"
-              }}>
-                <em style={{color: "#6B7280"}}>Press Simplify to generate color-coded output here.</em>
-              </div>
-              <div style={{
-                marginTop: "12px",
-                display: "flex",
-                gap: "8px",
-                flexWrap: "wrap"
-              }}>
-                <div style={{
-                  background: "rgba(59, 130, 246, 0.1)",
-                  padding: "4px 8px",
-                  borderRadius: "6px",
-                  fontSize: "11px",
-                  fontWeight: 600,
-                  color: "#1E40AF"
-                }}>Color-coded</div>
-                <div style={{
-                  background: "rgba(59, 130, 246, 0.1)",
-                  padding: "4px 8px",
-                  borderRadius: "6px",
-                  fontSize: "11px",
-                  fontWeight: 600,
-                  color: "#1E40AF"
-                }}>Syntax Highlight</div>
-                <div style={{
-                  background: "rgba(59, 130, 246, 0.1)",
-                  padding: "4px 8px",
-                  borderRadius: "6px",
-                  fontSize: "11px",
-                  fontWeight: 600,
-                  color: "#1E40AF"
-                }}>Easy Read</div>
-              </div>
-            </div>
+                borderRadius: "12px",
+                border: "2px solid #E5E7EB",
+                fontSize: "16px",
+                fontFamily: "inherit",
+                resize: "vertical"
+              }}
+              placeholder="Paste any paragraph here..."
+            />
           </div>
 
-          {/* Accessibility Card */}
-          <div className="card" style={{
-            background: "linear-gradient(135deg, #F3E8FF 0%, #E9D5FF 100%)",
-            border: "2px solid #A78BFA",
-            position: "relative",
-            overflow: "hidden"
+          {/* Compare Toggle */}
+          <div style={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "24px"
           }}>
+            <button
+              onClick={() => setCompareMode(!compareMode)}
+              style={{
+                padding: "12px 24px",
+                borderRadius: "10px",
+                border: "2px solid #8B5CF6",
+                background: compareMode
+                  ? "linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)"
+                  : "#FFFFFF",
+                color: compareMode ? "#FFFFFF" : "#8B5CF6",
+                fontSize: "16px",
+                fontWeight: 600,
+                cursor: "pointer",
+                transition: "all 0.2s"
+              }}
+            >
+              {compareMode ? "✓ Compare Before/After" : "Compare Before/After"}
+            </button>
+          </div>
+
+          {/* Output Display */}
+          {compareMode ? (
             <div style={{
-              position: "absolute",
-              top: "-20px",
-              right: "-20px",
-              width: "80px",
-              height: "80px",
-              background: "rgba(167, 139, 250, 0.2)",
-              borderRadius: "50%",
-            }} />
-            <div style={{position: "relative", zIndex: 1}}>
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "24px"
+            }}>
+              <div>
+                <h3 style={{
+                  fontSize: "18px",
+                  fontWeight: 700,
+                  marginBottom: "12px",
+                  color: "#EF4444"
+                }}>
+                  BEFORE
+                </h3>
+                <div style={{
+                  padding: "24px",
+                  background: "#FEF2F2",
+                  borderRadius: "12px",
+                  border: "2px solid #FCA5A5",
+                  fontSize: "16px",
+                  lineHeight: "1.6"
+                }}>
+                  {demoText}
+                </div>
+              </div>
+              <div>
+                <h3 style={{
+                  fontSize: "18px",
+                  fontWeight: 700,
+                  marginBottom: "12px",
+                  color: "#10B981"
+                }}>
+                  AFTER
+                </h3>
+                {renderText()}
+              </div>
+            </div>
+          ) : (
+            <div>
+              {renderText()}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* 💛 WHY THIS MATTERS SECTION */}
+      <div style={{
+        background: "linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)",
+        padding: "80px 20px",
+        marginBottom: "80px"
+      }}>
+        <div style={{maxWidth: "1000px", margin: "0 auto"}}>
+          <h2 style={{
+            fontSize: "42px",
+            fontWeight: 800,
+            marginBottom: "32px",
+            textAlign: "center",
+            color: "var(--text)"
+          }}>
+            Learning Isn't One-Size-Fits-All. Our Brains Aren't Either.
+          </h2>
+          
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+            gap: "24px",
+            marginBottom: "40px"
+          }}>
+            {[
+              "1 in 5 students struggle with reading barriers like dyslexia, ADHD, or processing issues.",
+              "Most digital platforms are made for neurotypical learners.",
+              "Long paragraphs, tiny fonts, and dense text increase cognitive load and frustration.",
+              "Students lose confidence, motivation, and grades suffer."
+            ].map((point, i) => (
+              <div key={i} className="card" style={{
+                padding: "24px",
+                background: "#FFFFFF",
+                borderRadius: "16px",
+                border: "2px solid rgba(249, 115, 22, 0.2)"
+              }}>
+                <div style={{
+                  fontSize: "32px",
+                  marginBottom: "12px"
+                }}>
+                  {i === 0 ? "📊" : i === 1 ? "💻" : i === 2 ? "📄" : "😔"}
+                </div>
+                <p style={{
+                  fontSize: "16px",
+                  lineHeight: "1.6",
+                  color: "var(--text)"
+                }}>
+                  {point}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div style={{
+            textAlign: "center",
+            padding: "32px",
+            background: "linear-gradient(135deg, #8B5CF6 0%, #10B981 100%)",
+            borderRadius: "20px",
+            color: "#FFFFFF"
+          }}>
+            <p style={{
+              fontSize: "24px",
+              fontWeight: 700,
+              margin: 0
+            }}>
+              We're fixing that — with inclusive, brain-friendly technology.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* ⭐ KEY FEATURES SECTION */}
+      <div style={{
+        maxWidth: "1200px",
+        margin: "0 auto 80px",
+        padding: "0 20px"
+      }}>
+        <div style={{textAlign: "center", marginBottom: "48px"}}>
+          <h2 style={{
+            fontSize: "42px",
+            fontWeight: 800,
+            marginBottom: "16px",
+            color: "var(--text)"
+          }}>
+            Everything You Need for Stress-Free Reading
+          </h2>
+        </div>
+
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+          gap: "24px"
+        }}>
+          {[
+            {
+              title: "Dyslexia-Friendly Formatting",
+              description: "Better letter spacing, word spacing, and clean fonts scientifically proven to reduce reading strain.",
+              icon: "📖",
+              color: "#8B5CF6"
+            },
+            {
+              title: "ADHD Focus Mode",
+              description: "Distraction-free screen, line-highlighting, and adaptive pacing to keep attention stable.",
+              icon: "🎯",
+              color: "#10B981"
+            },
+            {
+              title: "One-Click AI Simplification",
+              description: "Turns complex sentences into short, clean, easy-to-understand lines.",
+              icon: "✨",
+              color: "#3B82F6"
+            },
+            {
+              title: "Natural Voice Text-to-Speech",
+              description: "Human-like voice narration with adjustable speed for auditory learners.",
+              icon: "🔊",
+              color: "#F59E0B"
+            },
+            {
+              title: "Color-Coded Structure",
+              description: "Highlights keywords, transitions, emotions, and important ideas.",
+              icon: "🎨",
+              color: "#EC4899"
+            },
+            {
+              title: "Personalisation Engine",
+              description: "Choose your font, colors, reading pace, difficulty level, and narration voice.",
+              icon: "⚙️",
+              color: "#6366F1"
+            },
+            {
+              title: "Smart Study Tools",
+              description: "Automatically generates summaries, notes, flashcards, and quizzes from any text.",
+              icon: "🧠",
+              color: "#14B8A6"
+            },
+            {
+              title: "Cross-Platform Extension",
+              description: "Works on PDFs, browser pages, e-learning portals, and even textbooks via camera scan.",
+              icon: "🌐",
+              color: "#F97316"
+            }
+          ].map((feature, i) => (
+            <div key={i} className="card" style={{
+              padding: "32px",
+              background: "linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%)",
+              borderRadius: "20px",
+              border: `2px solid ${feature.color}40`,
+              transition: "all 0.3s",
+              cursor: "pointer",
+              height: "100%",
+              display: "flex",
+              flexDirection: "column"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-4px)";
+              e.currentTarget.style.boxShadow = `0 12px 32px ${feature.color}30`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 4px 16px rgba(0, 0, 0, 0.1)";
+            }}
+            >
               <div style={{
-                fontSize: "32px",
+                fontSize: "48px",
+                marginBottom: "16px"
+              }}>
+                {feature.icon}
+              </div>
+              <h3 style={{
+                fontSize: "22px",
+                fontWeight: 700,
                 marginBottom: "12px",
+                color: "var(--text)"
+              }}>
+                {feature.title}
+              </h3>
+              <p style={{
+                fontSize: "15px",
+                lineHeight: "1.6",
+                color: "var(--muted)",
+                flex: 1
+              }}>
+                {feature.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ⚙️ HOW IT WORKS SECTION */}
+      <div style={{
+        background: "linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%)",
+        padding: "80px 20px",
+        marginBottom: "80px"
+      }}>
+        <div style={{maxWidth: "1000px", margin: "0 auto"}}>
+          <h2 style={{
+            fontSize: "42px",
+            fontWeight: 800,
+            marginBottom: "48px",
+            textAlign: "center",
+            color: "var(--text)"
+          }}>
+            How It Works
+          </h2>
+
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+            gap: "32px"
+          }}>
+            {[
+              {
+                step: "1️⃣",
+                title: "Input Your Text",
+                description: "Paste, upload, or extract text from a website or PDF.",
+                icon: "📝"
+              },
+              {
+                step: "2️⃣",
+                title: "Choose Your Mode",
+                description: "Dyslexia Mode • ADHD Mode • Balanced Mode",
+                icon: "🎛️"
+              },
+              {
+                step: "3️⃣",
+                title: "Read Effortlessly",
+                description: "Get simplified text, better spacing, and real-time voice narration.",
+                icon: "✨"
+              }
+            ].map((step, i) => (
+              <div key={i} style={{
+                textAlign: "center",
+                padding: "40px",
+                background: "#FFFFFF",
+                borderRadius: "20px",
+                border: "2px solid rgba(59, 130, 246, 0.2)",
+                position: "relative"
+              }}>
+                <div style={{
+                  fontSize: "64px",
+                  marginBottom: "16px"
+                }}>
+                  {step.icon}
+                </div>
+                <div style={{
+                  fontSize: "32px",
+                  marginBottom: "12px",
+                  fontWeight: 800
+                }}>
+                  {step.step}
+                </div>
+                <h3 style={{
+                  fontSize: "24px",
+                  fontWeight: 700,
+                  marginBottom: "12px",
+                  color: "var(--text)"
+                }}>
+                  {step.title}
+                </h3>
+                <p style={{
+                  fontSize: "16px",
+                  lineHeight: "1.6",
+                  color: "var(--muted)"
+                }}>
+                  {step.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* 🔥 SHOWCASE EXAMPLE SECTION */}
+      <div style={{
+        maxWidth: "1200px",
+        margin: "0 auto 80px",
+        padding: "0 20px"
+      }}>
+        <div style={{textAlign: "center", marginBottom: "48px"}}>
+          <h2 style={{
+            fontSize: "42px",
+            fontWeight: 800,
+            marginBottom: "16px",
+            color: "var(--text)"
+          }}>
+            A Real Example of Our AI Magic
+          </h2>
+        </div>
+
+        <div className="card" style={{
+          padding: "40px",
+          background: "#FFFFFF",
+          borderRadius: "20px",
+          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)"
+        }}>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "32px",
+            marginBottom: "32px"
+          }}>
+            <div>
+              <h3 style={{
+                fontSize: "20px",
+                fontWeight: 700,
+                marginBottom: "16px",
+                color: "#EF4444",
                 display: "flex",
                 alignItems: "center",
                 gap: "8px"
               }}>
-                <span>♿</span>
-                <h3 style={{margin: 0, fontSize: "22px", fontWeight: 800, color: "var(--text)"}}>
-                  Accessibility
-                </h3>
-              </div>
-              <p style={{fontSize: "14px", color: "var(--muted)", lineHeight: "1.6", marginBottom: "16px"}}>
-                Customize text appearance with dyslexia-friendly fonts, spacing, and color themes.
-              </p>
+                <span>❌</span> BEFORE
+              </h3>
               <div style={{
-                background: "rgba(255, 255, 255, 0.7)",
-                padding: "12px",
-                borderRadius: "8px",
-                border: "1px solid rgba(167, 139, 250, 0.3)"
+                padding: "24px",
+                background: "#FEF2F2",
+                borderRadius: "12px",
+                border: "2px solid #FCA5A5",
+                fontSize: "16px",
+                lineHeight: "1.6",
+                color: "#1F2937"
               }}>
-                <div style={{display: "flex", flexDirection: "column", gap: "8px", fontSize: "12px"}}>
-                  <div style={{display: "flex", alignItems: "center", gap: "8px"}}>
-                    <span style={{fontSize: "16px"}}>🔤</span>
-                    <span style={{color: "#6B21A8", fontWeight: 600}}>Dyslexia-friendly fonts</span>
-                  </div>
-                  <div style={{display: "flex", alignItems: "center", gap: "8px"}}>
-                    <span style={{fontSize: "16px"}}>📏</span>
-                    <span style={{color: "#6B21A8", fontWeight: 600}}>Adjustable spacing</span>
-                  </div>
-                  <div style={{display: "flex", alignItems: "center", gap: "8px"}}>
-                    <span style={{fontSize: "16px"}}>🎨</span>
-                    <span style={{color: "#6B21A8", fontWeight: 600}}>Multiple color themes</span>
-                  </div>
-                  <div style={{display: "flex", alignItems: "center", gap: "8px"}}>
-                    <span style={{fontSize: "16px"}}>👁️</span>
-                    <span style={{color: "#6B21A8", fontWeight: 600}}>High contrast options</span>
-                  </div>
-                </div>
+                The intricate mechanisms underlying cognitive processing in neurodivergent individuals necessitate a comprehensive understanding of how environmental stimuli interact with neural pathways to produce adaptive behavioral responses.
               </div>
             </div>
+            <div>
+              <h3 style={{
+                fontSize: "20px",
+                fontWeight: 700,
+                marginBottom: "16px",
+                color: "#10B981",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px"
+              }}>
+                <span>✅</span> AFTER
+              </h3>
+              <div style={{
+                padding: "24px",
+                background: "#F0FDF4",
+                borderRadius: "12px",
+                border: "2px solid #86EFAC",
+                fontSize: "18px",
+                lineHeight: "2.0",
+                letterSpacing: "0.05em",
+                color: "#1F2937"
+              }}>
+                The complex ways behind thinking in people with different brain types need a full understanding of how things around us interact with brain connections to produce helpful actions.
+              </div>
+            </div>
+          </div>
+
+          {/* TTS Playback Button */}
+          <div style={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "16px",
+            marginBottom: "24px"
+          }}>
+            <button style={{
+              padding: "14px 28px",
+              borderRadius: "12px",
+              border: "2px solid #3B82F6",
+              background: "linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%)",
+              color: "#FFFFFF",
+              fontSize: "16px",
+              fontWeight: 700,
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px"
+            }}>
+              <span>🔊</span>
+              <span>Play Audio</span>
+            </button>
+          </div>
+
+          {/* Focus Score Bar */}
+          <div>
+            <div style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "8px"
+            }}>
+              <span style={{
+                fontSize: "16px",
+                fontWeight: 600,
+                color: "var(--text)"
+              }}>
+                Focus Score
+              </span>
+              <span style={{
+                fontSize: "20px",
+                fontWeight: 700,
+                color: "#10B981"
+              }}>
+                92/100
+              </span>
+            </div>
+            <div style={{
+              width: "100%",
+              height: "12px",
+              background: "#E5E7EB",
+              borderRadius: "6px",
+              overflow: "hidden"
+            }}>
+              <div style={{
+                width: "92%",
+                height: "100%",
+                background: "linear-gradient(90deg, #10B981 0%, #34D399 100%)",
+                borderRadius: "6px",
+                transition: "width 0.3s"
+              }} />
+            </div>
+            <p style={{
+              fontSize: "14px",
+              color: "var(--muted)",
+              marginTop: "8px"
+            }}>
+              Improved readability, reduced cognitive load, and enhanced focus.
+            </p>
           </div>
         </div>
       </div>
 
-      <div style={{marginTop:18}} className="card">
-        <label><strong>Type / paste text to simplify</strong></label>
-        <textarea style={{width:"100%", minHeight:120, marginTop:8, padding:"12px", borderRadius:10, border:"1px solid rgba(0, 0, 0, 0.1)", background:"#FFFFFF", color:"#1F2937", fontFamily:"inherit", fontSize:15}} value={text} onChange={e=>setText(e.target.value)} />
-        <div style={{marginTop:12, display:"flex", gap:8}}>
-          <button className="btn primary" onClick={simplify}>Simplify</button>
-          <button className="btn" onClick={()=>{ navigator.clipboard.writeText(simplified || text); alert("Copied to clipboard"); }}>Copy</button>
-        </div>
+      <div className="footer" style={{
+        marginTop: "60px",
+        marginBottom: "40px",
+        textAlign: "center",
+        padding: "40px 20px",
+        background: "linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%)",
+        borderRadius: "20px"
+      }}>
+        <p style={{
+          fontSize: "18px",
+          fontWeight: 600,
+          color: "var(--text)",
+          marginBottom: "8px"
+        }}>
+          Made for HackShetra — FocusAid Platform
+        </p>
+        <p style={{
+          fontSize: "14px",
+          color: "var(--muted)"
+        }}>
+          Built for neurodiverse learners. Made for everyone.
+        </p>
       </div>
-
-      <div className="footer" style={{marginTop:60, marginBottom:40}}>Made for HackShetra — FocusAid Platform</div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 // lib/api.js - API configuration and utilities
 
 // Backend API base URL
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001";
 
 /**
  * Make an API request to the backend

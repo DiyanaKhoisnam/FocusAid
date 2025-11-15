@@ -75,7 +75,8 @@ export default function Login(){
       console.error("Signup error:", err);
       const errorMsg = err.message || err.toString();
       if (errorMsg.includes("Failed to fetch") || errorMsg.includes("NetworkError")) {
-        setError("Cannot connect to backend server. Please ensure the backend is running on http://localhost:8000");
+        const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001";
+        setError(`Cannot connect to backend server. Please ensure the backend is running on ${API_BASE_URL}`);
       } else {
         setError(`Connection error: ${errorMsg}`);
       }
@@ -130,7 +131,8 @@ export default function Login(){
       console.error("Login error:", err);
       const errorMsg = err.message || err.toString();
       if (errorMsg.includes("Failed to fetch") || errorMsg.includes("NetworkError")) {
-        setError("Cannot connect to backend server. Please ensure the backend is running on http://localhost:8000");
+        const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001";
+        setError(`Cannot connect to backend server. Please ensure the backend is running on ${API_BASE_URL}`);
       } else {
         setError(`Connection error: ${errorMsg}`);
       }
