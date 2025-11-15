@@ -7,6 +7,7 @@ from fastapi import HTTPException, status, UploadFile
 from datetime import datetime
 import PyPDF2
 import io
+from openai import OpenAI
 from core.storage import documents_db, summaries_db, generate_id
 from core.config import settings
 
@@ -204,10 +205,51 @@ async def generate_summary(
         # Truncate text if too long for OpenAI (to fit within token limits)
         # gpt-3.5-turbo has ~4096 token context, we reserve ~500 tokens for prompt/response
         # So we can use ~3500 tokens for input text (~10,500 characters)
+        text_for_summary = text
         if len(text) > MAX_TEXT_FOR_SUMMARY:
-            text = text[:MAX_TEXT_FOR_SUMMARY] + "\n\n[Text truncated due to length limits...]"
+            text_for_summary = text[:MAX_TEXT_FOR_SUMMARY] + "\n\n[Text truncated due to length limits...]"
         
-        # Generate summary using rule-based extraction (no API needed)
+        # Try OpenAI first if API key is available
+        if settings.OPENAI_API_KEY:
+            try:
+                client = OpenAI(api_key=settings.OPENAI_API_KEY)
+                
+                focus_text = f" Focus on: {focus}." if focus else ""
+                prompt = f"Summarize the following text in {max_length} words or less.{focus_text} Provide a clear, concise summary with key points:\n\n{text_for_summary}"
+                
+                response = client.chat.completions.create(
+                    model=settings.OPENAI_MODEL,
+                    messages=[
+                        {"role": "system", "content": "You are an expert at creating concise, informative summaries. Focus on key points and main ideas."},
+                        {"role": "user", "content": prompt}
+                    ],
+                    temperature=0.3,
+                    max_tokens=500
+                )
+                
+                summary = response.choices[0].message.content.strip()
+                
+                # Store summary
+                summaries_db[document_id] = {
+                    "summary": summary,
+                    "max_length": max_length,
+                    "focus": focus,
+                    "created_at": datetime.utcnow()
+                }
+                
+                return {
+                    "document_id": document_id,
+                    "summary": summary,
+                    "original_length": original_length,
+                    "summary_length": len(summary),
+                    "created_at": datetime.utcnow()
+                }
+            except Exception as e:
+                print(f"Error generating summary with OpenAI: {str(e)}")
+                # Fall back to rule-based
+                pass
+        
+        # Fallback: Generate summary using rule-based extraction
         # Extract key sentences and create bullet points
         sentences = re.split(r'[.!?]+', text)
         sentences = [s.strip() for s in sentences if len(s.strip()) > 20]  # Filter short sentences

@@ -2,18 +2,44 @@ import os
 import re
 import requests
 from typing import Dict, Optional
+from openai import OpenAI
 from services.document_service import get_document
 from services.tts_service import generate_speech
 from core.storage import documents_db
+from core.config import settings
 
 # Hugging Face API endpoint (free, no API key needed for public models)
 HUGGINGFACE_API = "https://api-inference.huggingface.co/models"
 
 async def simplify_text(text: str) -> str:
-    """Simplify complex text for better readability"""
+    """Simplify complex text for better readability using OpenAI"""
     try:
-        # Use rule-based simplification (no API needed)
-        # This is more reliable and free
+        # Use OpenAI if API key is available
+        if settings.OPENAI_API_KEY:
+            try:
+                client = OpenAI(api_key=settings.OPENAI_API_KEY)
+                
+                # Truncate if too long (keep first 6000 chars)
+                text_to_simplify = text[:6000] if len(text) > 6000 else text
+                
+                response = client.chat.completions.create(
+                    model=settings.OPENAI_MODEL,
+                    messages=[
+                        {"role": "system", "content": "You are a text simplification expert. Simplify the given text to make it easier to read for people with dyslexia and ADHD. Use simpler words, shorter sentences, and clearer structure. Maintain the original meaning."},
+                        {"role": "user", "content": f"Simplify this text:\n\n{text_to_simplify}"}
+                    ],
+                    temperature=0.3,
+                    max_tokens=2000
+                )
+                
+                simplified = response.choices[0].message.content.strip()
+                return simplified
+            except Exception as e:
+                print(f"Error simplifying with OpenAI: {str(e)}")
+                # Fall back to rule-based
+                pass
+        
+        # Fallback to rule-based simplification
         
         # Complex word replacements
         replacements = {
@@ -155,20 +181,13 @@ async def highlight_keywords(text: str) -> str:
 
 def apply_accessibility_settings(text: str, settings: Dict[str, str]) -> str:
     """Apply accessibility settings to text"""
-    processed_text = text
-    
-    # Apply word spacing
-    spacing = settings.get("spacing", "normal")
-    if spacing == "wide":
-        processed_text = processed_text.replace(" ", "  ")
-    elif spacing == "extra-wide":
-        processed_text = processed_text.replace(" ", "   ")
-    
+    # Note: Letter spacing is handled on frontend via CSS
+    # Word spacing was changed to letter spacing - no backend processing needed
     # Font is handled on frontend via CSS
-    
     # Color theme is handled on frontend via CSS
     
-    return processed_text
+    # Return text as-is since all formatting is done via CSS on frontend
+    return text
 
 async def process_document(
     document_id: str,

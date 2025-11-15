@@ -1,10 +1,9 @@
 import os
 import requests
 from typing import List, Dict
+from openai import OpenAI
 from schemas.chatbot import ChatMessage
-
-# Using Hugging Face Inference API (free, no API key needed for public models)
-HUGGINGFACE_CHAT_API = "https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium"
+from core.config import settings
 
 # System prompt for the chatbot focused on dyslexia and ADHD support
 SYSTEM_PROMPT = """You are a helpful AI assistant specialized in supporting people with dyslexia and ADHD. 
@@ -45,8 +44,35 @@ async def get_chat_response(message: str, conversation_history: List[Dict] = Non
         # Add current user message
         messages.append({"role": "user", "content": message})
         
-        # Use rule-based responses for dyslexia/ADHD support (no API needed)
-        # This provides helpful, structured responses without external dependencies
+        # Try OpenAI first if API key is available
+        if settings.OPENAI_API_KEY:
+            try:
+                client = OpenAI(api_key=settings.OPENAI_API_KEY)
+                
+                response = client.chat.completions.create(
+                    model=settings.OPENAI_MODEL,
+                    messages=messages,
+                    temperature=0.7,
+                    max_tokens=500
+                )
+                
+                assistant_message = response.choices[0].message.content.strip()
+                
+                # Update conversation history
+                updated_history = (conversation_history or []).copy()
+                updated_history.append({"role": "user", "content": message})
+                updated_history.append({"role": "assistant", "content": assistant_message})
+                
+                return {
+                    "response": assistant_message,
+                    "conversation_history": updated_history
+                }
+            except Exception as e:
+                print(f"Error with OpenAI chat: {str(e)}")
+                # Fall back to rule-based
+                pass
+        
+        # Fallback: Use rule-based responses for dyslexia/ADHD support
         user_message_lower = message.lower()
         
         # Generate contextual response based on keywords

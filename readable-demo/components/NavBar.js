@@ -1,10 +1,27 @@
 // components/NavBar.js
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 
 export default function NavBar(){
   const router = useRouter();
   const active = (path) => router.pathname === path ? "active" : "";
+  const [currentProfile, setCurrentProfile] = useState("adhd"); // "adhd" or "dyslexia"
+
+  // Update current profile based on route
+  useEffect(() => {
+    if (router.pathname === "/dyslexia") {
+      setCurrentProfile("dyslexia");
+    } else if (router.pathname === "/adhd") {
+      setCurrentProfile("adhd");
+    }
+  }, [router.pathname]);
+
+  const toggleProfile = () => {
+    const newProfile = currentProfile === "adhd" ? "dyslexia" : "adhd";
+    setCurrentProfile(newProfile);
+    router.push(`/${newProfile}`);
+  };
 
   return (
     <nav className="navbar">
@@ -26,33 +43,59 @@ export default function NavBar(){
         </div>
       </div>
 
-      <div className="navbar-links" style={{gap: "8px"}}>
+      <div className="navbar-links" style={{gap: "8px", display: "flex", alignItems: "center"}}>
         <Link href="/" className={active("/")}>Home</Link>
-        <Link 
-          href="/uploads" 
-          className={active("/uploads")}
+        
+        {/* Profile Toggle Button */}
+        <div
           style={{
-            background: active("/uploads") === "active" ? "linear-gradient(135deg, #F97316 0%, #FB923C 100%)" : "transparent",
-            color: active("/uploads") === "active" ? "#FFFFFF" : "var(--text)",
-            padding: "8px 16px",
-            borderRadius: "8px",
-            fontWeight: 600,
-            textDecoration: "none",
-            transition: "all 0.2s",
-          }}
-          onMouseEnter={(e) => {
-            if (active("/uploads") !== "active") {
-              e.currentTarget.style.background = "rgba(249, 115, 22, 0.1)";
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (active("/uploads") !== "active") {
-              e.currentTarget.style.background = "transparent";
-            }
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            padding: "4px",
+            background: "#F3F4F6",
+            borderRadius: "12px",
+            border: "2px solid rgba(0, 0, 0, 0.1)",
+            position: "relative",
           }}
         >
-          Uploads
-        </Link>
+          <button
+            onClick={toggleProfile}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "8px 16px",
+              borderRadius: "8px",
+              border: "none",
+              background: currentProfile === "adhd" 
+                ? "linear-gradient(135deg, #10B981 0%, #34D399 100%)"
+                : "linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%)",
+              color: "#FFFFFF",
+              fontSize: "14px",
+              fontWeight: 700,
+              cursor: "pointer",
+              transition: "all 0.3s ease",
+              minWidth: "140px",
+              justifyContent: "center",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "scale(1.05)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "scale(1)";
+            }}
+          >
+            <span style={{ fontSize: "18px" }}>
+              {currentProfile === "adhd" ? "🎯" : "📖"}
+            </span>
+            <span style={{ textTransform: "uppercase" }}>
+              {currentProfile === "adhd" ? "ADHD" : "Dyslexia"}
+            </span>
+            <span style={{ fontSize: "12px", opacity: 0.8 }}>↔</span>
+          </button>
+        </div>
+
         <Link href="/login" style={{textDecoration:"none"}}>
           <button className="btn-nav-cta" style={{marginLeft: "0"}}>Login</button>
         </Link>

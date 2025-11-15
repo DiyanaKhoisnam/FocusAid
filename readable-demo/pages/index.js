@@ -44,7 +44,7 @@ export default function Home(){
       <div className="hero">
         <div className="hero-left">
           <h1 className="h1" style={{fontSize:"56px", lineHeight:"1.1", marginBottom:20}}>
-            Supporting Children with Dyslexia & Dyscalculia
+            Supporting Students with Dyslexia and ADHD
           </h1>
           <p className="lead" style={{fontSize:"18px", lineHeight:"1.6", marginBottom:32, maxWidth:"600px"}}>
             Transform any educational content into dyslexia- and ADHD-friendly formats with our AI-powered platform — offering instant audio narration, smart summaries, and optimized, distraction-free text rendering designed for diverse neurodivergent learners.
@@ -106,16 +106,16 @@ export default function Home(){
             <div style={{fontSize:32, marginBottom:16}}>📖</div>
             <h3 style={{fontSize:"20px", fontWeight:700, marginBottom:12, color:"var(--text)"}}>Reading support</h3>
             <p style={{fontSize:15, color:"var(--muted)", lineHeight:"1.6", marginBottom:20, flex:1}}>
-              Tailored exercises and therapies designed to improve reading, writing, and spelling skills for children with dyslexia.
+              Tailored tools and features designed to improve reading, writing, and comprehension skills for students with dyslexia.
             </p>
             <button className="btn ghost" style={{width:"100%", marginTop:"auto"}}>Learn More</button>
           </div>
 
           <div className="card" style={{background:"#A7F3D0", border:"none", display:"flex", flexDirection:"column", height:"100%"}}>
-            <div style={{fontSize:32, marginBottom:16}}>🔢</div>
-            <h3 style={{fontSize:"20px", fontWeight:700, marginBottom:12, color:"var(--text)"}}>Math Confidence</h3>
+            <div style={{fontSize:32, marginBottom:16}}>🎯</div>
+            <h3 style={{fontSize:"20px", fontWeight:700, marginBottom:12, color:"var(--text)"}}>Focus Support</h3>
             <p style={{fontSize:15, color:"var(--muted)", lineHeight:"1.6", marginBottom:20, flex:1}}>
-              Step-by-step guidance, games, and activities that help children with dyscalculia understand numbers and enjoy learning math.
+              Tools and strategies designed to help students with ADHD maintain focus, reduce distractions, and improve learning outcomes.
             </p>
             <button className="btn ghost" style={{width:"100%", marginTop:"auto"}}>Learn More</button>
           </div>
@@ -141,17 +141,194 @@ export default function Home(){
         </p>
         
         <div className="grid" style={{gridTemplateColumns:"repeat(3, 1fr)", gap:24, marginBottom:32}}>
-          <div className="card">
-            <h3>Before → After</h3>
-            <p className="small">Original text on left, simplified on right — use the input below to test.</p>
+          {/* Before → After Card */}
+          <div className="card" style={{
+            background: "linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)",
+            border: "2px solid #F59E0B",
+            position: "relative",
+            overflow: "hidden"
+          }}>
+            <div style={{
+              position: "absolute",
+              top: "-20px",
+              right: "-20px",
+              width: "80px",
+              height: "80px",
+              background: "rgba(245, 158, 11, 0.2)",
+              borderRadius: "50%",
+            }} />
+            <div style={{position: "relative", zIndex: 1}}>
+              <div style={{
+                fontSize: "32px",
+                marginBottom: "12px",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px"
+              }}>
+                <span>📊</span>
+                <h3 style={{margin: 0, fontSize: "22px", fontWeight: 800, color: "var(--text)"}}>
+                  Before → After
+                </h3>
+              </div>
+              <p style={{fontSize: "14px", color: "var(--muted)", lineHeight: "1.6", marginBottom: "16px"}}>
+                See your text transform from complex to simple. Original text on the left, simplified version on the right.
+              </p>
+              <div style={{
+                background: "rgba(255, 255, 255, 0.7)",
+                padding: "12px",
+                borderRadius: "8px",
+                border: "1px solid rgba(245, 158, 11, 0.3)"
+              }}>
+                <div style={{display: "flex", gap: "12px", fontSize: "12px"}}>
+                  <div style={{flex: 1}}>
+                    <div style={{fontWeight: 700, color: "#92400E", marginBottom: "4px"}}>BEFORE</div>
+                    <div style={{color: "#78350F"}}>Complex sentences with difficult words</div>
+                  </div>
+                  <div style={{fontSize: "20px", color: "#F59E0B"}}>→</div>
+                  <div style={{flex: 1}}>
+                    <div style={{fontWeight: 700, color: "#92400E", marginBottom: "4px"}}>AFTER</div>
+                    <div style={{color: "#78350F"}}>Simple, clear sentences</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="card">
-            <h3>Readable Output</h3>
-            <div id="__out" className="output small"><em>Press Simplify to generate color-coded output here.</em></div>
+
+          {/* Readable Output Card */}
+          <div className="card" style={{
+            background: "linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%)",
+            border: "2px solid #3B82F6",
+            position: "relative",
+            overflow: "hidden"
+          }}>
+            <div style={{
+              position: "absolute",
+              top: "-20px",
+              right: "-20px",
+              width: "80px",
+              height: "80px",
+              background: "rgba(59, 130, 246, 0.2)",
+              borderRadius: "50%",
+            }} />
+            <div style={{position: "relative", zIndex: 1}}>
+              <div style={{
+                fontSize: "32px",
+                marginBottom: "12px",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px"
+              }}>
+                <span>✨</span>
+                <h3 style={{margin: 0, fontSize: "22px", fontWeight: 800, color: "var(--text)"}}>
+                  Readable Output
+                </h3>
+              </div>
+              <p style={{fontSize: "14px", color: "var(--muted)", lineHeight: "1.6", marginBottom: "16px"}}>
+                Get color-coded, syntax-highlighted text that's easier to read and understand.
+              </p>
+              <div id="__out" className="output small" style={{
+                background: "rgba(255, 255, 255, 0.8)",
+                padding: "16px",
+                borderRadius: "8px",
+                minHeight: "100px",
+                border: "1px solid rgba(59, 130, 246, 0.3)",
+                fontSize: "13px",
+                lineHeight: "1.6"
+              }}>
+                <em style={{color: "#6B7280"}}>Press Simplify to generate color-coded output here.</em>
+              </div>
+              <div style={{
+                marginTop: "12px",
+                display: "flex",
+                gap: "8px",
+                flexWrap: "wrap"
+              }}>
+                <div style={{
+                  background: "rgba(59, 130, 246, 0.1)",
+                  padding: "4px 8px",
+                  borderRadius: "6px",
+                  fontSize: "11px",
+                  fontWeight: 600,
+                  color: "#1E40AF"
+                }}>Color-coded</div>
+                <div style={{
+                  background: "rgba(59, 130, 246, 0.1)",
+                  padding: "4px 8px",
+                  borderRadius: "6px",
+                  fontSize: "11px",
+                  fontWeight: 600,
+                  color: "#1E40AF"
+                }}>Syntax Highlight</div>
+                <div style={{
+                  background: "rgba(59, 130, 246, 0.1)",
+                  padding: "4px 8px",
+                  borderRadius: "6px",
+                  fontSize: "11px",
+                  fontWeight: 600,
+                  color: "#1E40AF"
+                }}>Easy Read</div>
+              </div>
+            </div>
           </div>
-          <div className="card">
-            <h3>Accessibility</h3>
-            <p className="small">Color-coded tokens, adjustable font and spacing, multiple theme presets for visual comfort.</p>
+
+          {/* Accessibility Card */}
+          <div className="card" style={{
+            background: "linear-gradient(135deg, #F3E8FF 0%, #E9D5FF 100%)",
+            border: "2px solid #A78BFA",
+            position: "relative",
+            overflow: "hidden"
+          }}>
+            <div style={{
+              position: "absolute",
+              top: "-20px",
+              right: "-20px",
+              width: "80px",
+              height: "80px",
+              background: "rgba(167, 139, 250, 0.2)",
+              borderRadius: "50%",
+            }} />
+            <div style={{position: "relative", zIndex: 1}}>
+              <div style={{
+                fontSize: "32px",
+                marginBottom: "12px",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px"
+              }}>
+                <span>♿</span>
+                <h3 style={{margin: 0, fontSize: "22px", fontWeight: 800, color: "var(--text)"}}>
+                  Accessibility
+                </h3>
+              </div>
+              <p style={{fontSize: "14px", color: "var(--muted)", lineHeight: "1.6", marginBottom: "16px"}}>
+                Customize text appearance with dyslexia-friendly fonts, spacing, and color themes.
+              </p>
+              <div style={{
+                background: "rgba(255, 255, 255, 0.7)",
+                padding: "12px",
+                borderRadius: "8px",
+                border: "1px solid rgba(167, 139, 250, 0.3)"
+              }}>
+                <div style={{display: "flex", flexDirection: "column", gap: "8px", fontSize: "12px"}}>
+                  <div style={{display: "flex", alignItems: "center", gap: "8px"}}>
+                    <span style={{fontSize: "16px"}}>🔤</span>
+                    <span style={{color: "#6B21A8", fontWeight: 600}}>Dyslexia-friendly fonts</span>
+                  </div>
+                  <div style={{display: "flex", alignItems: "center", gap: "8px"}}>
+                    <span style={{fontSize: "16px"}}>📏</span>
+                    <span style={{color: "#6B21A8", fontWeight: 600}}>Adjustable spacing</span>
+                  </div>
+                  <div style={{display: "flex", alignItems: "center", gap: "8px"}}>
+                    <span style={{fontSize: "16px"}}>🎨</span>
+                    <span style={{color: "#6B21A8", fontWeight: 600}}>Multiple color themes</span>
+                  </div>
+                  <div style={{display: "flex", alignItems: "center", gap: "8px"}}>
+                    <span style={{fontSize: "16px"}}>👁️</span>
+                    <span style={{color: "#6B21A8", fontWeight: 600}}>High contrast options</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

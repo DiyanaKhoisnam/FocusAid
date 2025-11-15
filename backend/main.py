@@ -6,7 +6,7 @@ from contextlib import asynccontextmanager
 from datetime import datetime
 from pathlib import Path
 
-from routers import auth_router, tts_router, documents_router, chatbot_router
+from routers import auth_router, tts_router, documents_router, chatbot_router, quiz_router
 
 
 @asynccontextmanager
@@ -37,6 +37,7 @@ app.include_router(auth_router)
 app.include_router(tts_router)
 app.include_router(documents_router)
 app.include_router(chatbot_router)
+app.include_router(quiz_router)
 
 # Mount static files for serving audio files
 static_dir = Path("static")

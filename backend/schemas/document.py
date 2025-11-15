@@ -29,9 +29,9 @@ class ProcessDocumentRequest(BaseModel):
     """Request model for processing document with multiple options"""
     document_id: str = Field(..., description="ID of the document to process")
     options: Dict[str, bool] = Field(..., description="Processing options: summary, highlight, textToAudio, simplify")
-    accessibility_settings: Optional[Dict[str, str]] = Field(
+    accessibility_settings: Optional[Dict] = Field(
         default=None,
-        description="Accessibility settings: spacing (normal/wide/extra-wide), font (default/open-dyslexic/comic-sans/arial), colorTheme (default/high-contrast/sepia/dark)"
+        description="Accessibility settings: spacing (numeric 1-5), font (default/open-dyslexic/comic-sans/arial), colorTheme (default/high-contrast/sepia/dark)"
     )
 
 class ProcessDocumentResponse(BaseModel):
